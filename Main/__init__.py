@@ -1,4 +1,4 @@
-import time
+import time, uvloop
 from Main import Configurations as config
 from Main.logger import Logger
 from telegram.ext import ApplicationBuilder
@@ -6,6 +6,7 @@ from telegram.ext import ApplicationBuilder
 Logger()
 starttime = time.time()
 
+uvloop.install()
 app = (
     ApplicationBuilder()
     .token(config.Token)
