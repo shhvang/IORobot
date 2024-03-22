@@ -1,7 +1,6 @@
 from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CommandHandler
-from ._logger import init_logger
 
 import logging
 from . import application
@@ -36,4 +35,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
     
