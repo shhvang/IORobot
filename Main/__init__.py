@@ -1,9 +1,9 @@
 from time import time
 from Main import _config
-from Main.logger import _SetupLogger
+from Main.logger import Logger
 from telegram.ext import ApplicationBuilder
 
-_SetupLogger()
+Logger()
 start_time = time()
 
 application = (
