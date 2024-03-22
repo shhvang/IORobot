@@ -1,5 +1,5 @@
 from time import time
-from Main import configurations as config
+from Main import Configurations as config
 from Main.logger import Logger
 from telegram.ext import ApplicationBuilder
 
