@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CommandHandler
 
-import logging, uvloop
+import logging
 from . import application
 
 txt = '''
@@ -28,7 +28,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text(f"Hi, I'm {context.bot.first_name}")
 
 def main():
-    uvloop.install()
     application.add_handler(CommandHandler('start', start))
     logging.info('Successfully started!')
     application.run_polling()
