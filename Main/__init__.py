@@ -1,5 +1,5 @@
 from time import time
-from Main import _config
+from Main import configurations as config
 from Main.logger import Logger
 from telegram.ext import ApplicationBuilder
 
@@ -8,6 +8,6 @@ start_time = time()
 
 application = (
     ApplicationBuilder()
-    .token(_config.token)
+    .token(config.Token)
     .build()
 )
