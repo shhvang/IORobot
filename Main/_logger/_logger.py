@@ -1,7 +1,7 @@
 import logging, pathlib
 from logging.handlers import RotatingFileHandler, MemoryHandler
 
-def _setup_logger():
+def _SetupLogger():
     log_path = pathlib.Path('./Main/logger/') / f'kiyo.log'
     log_path.parent.mkdir(parents=True, exist_ok=True)
     logging.captureWarnings(True)
