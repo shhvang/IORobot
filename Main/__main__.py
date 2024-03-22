@@ -25,7 +25,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode=ParseMode.MARKDOWN
         )
     else:
-        await update.effective_message.reply_text("Hi, I'm Ayaka")
+        await update.effective_message.reply_text(f"Hi, I'm {context.bot.first_name}")
 
 def main():
     application.add_handler(CommandHandler('start', start))
