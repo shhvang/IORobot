@@ -38,7 +38,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode=ParseMode.MARKDOWN
         )
     else:
-        await update.effective_message.reply_text(f"Hi, I'm {context.bot.first_name}\nuptime: {get_readable_time(time.time() - start_time)}")
+        await update.effective_message.reply_text(f"Hi, I'm {context.bot.first_name}\nUptime: `{get_readable_time(time.time() - start_time)}`")
 
 def main():
     LOGS.info('Successfully started!')
