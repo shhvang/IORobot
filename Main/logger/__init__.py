@@ -17,10 +17,9 @@ def Logger():
                         level=logging.INFO,
     
                         )
+    
     logging.getLogger('psycopg2').setLevel(logging.WARNING)
     logging.getLogger('ptbcontrib.postgres_persistence.postgrespersistence').setLevel(logging.WARNING)
     logging.getLogger('apscheduler.scheduler').setLevel(logging.INFO)
-    logging.getLogger('telegram.ext.Application').setLevel(logging.DEBUG)
     logging.getLogger("httpx").setLevel(logging.WARNING)
-    
     logging.info('Initialized Logger!')
