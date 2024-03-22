@@ -1,1 +1,1 @@
-from ._logger import _SetupLogger
+from ._logger import Logger
