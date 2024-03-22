@@ -17,7 +17,6 @@ def init_logger():
                         level=logging.INFO,
     
                         )
-    
     logging.getLogger('psycopg2').setLevel(logging.WARNING)
     logging.getLogger('ptbcontrib.postgres_persistence.postgrespersistence').setLevel(logging.WARNING)
     logging.getLogger('apscheduler.scheduler').setLevel(logging.INFO)
