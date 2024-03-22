@@ -2,6 +2,8 @@ from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CommandHandler
 
+from Main.utils.decorators import kiyocmd
+
 import logging
 from . import application
 
@@ -17,6 +19,7 @@ Click Help button to find out more about how to use me to my full potential.
 If you have any questions, need assistance with something, or just want to have a friendly chat, don't hesitate to reach out.
 '''
 
+@kiyocmd('start')
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat.type == "private":
         await update.effective_message.reply_video(
@@ -28,7 +31,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text(f"Hi, I'm {context.bot.first_name}")
 
 def main():
-    application.add_handler(CommandHandler('start', start))
     logging.info('Successfully started!')
     application.run_polling()
     
