@@ -2,7 +2,7 @@ import logging, pathlib
 from logging.handlers import RotatingFileHandler, MemoryHandler
 
 def _setup_logger():
-    log_path = pathlib.Path('./Main/startup/logs/') / f'kiyo.log'
+    log_path = pathlib.Path('./Main/logger/') / f'kiyo.log'
     log_path.parent.mkdir(parents=True, exist_ok=True)
     logging.captureWarnings(True)
     logging.basicConfig(format='[%(asctime)s] - [Ayaka] << %(levelname)s >> %(name)s - %(message)s',
