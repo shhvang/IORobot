@@ -2,3 +2,4 @@ httpx
 python-telegram-bot[all]
 python-decouple
 python-dotenv
+uvloop
