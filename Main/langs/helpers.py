@@ -14,6 +14,9 @@ def reload_strings(lang_code: str = "en") -> Dict[str, str]:
     if lang_file.exists():
         with lang_file.open("r", encoding="utf-8") as file:
             lang_data = yaml.safe_load(file)
+            if lang_data is None or not isinstance(lang_data, dict):
+                LOGS.warning(f"Invalid data format in '{lang_file}' for language '{lang_code}'. Using empty dictionary.")
+                lang_data = {}
             languages[lang_code] = lang_data  # Store in languages
             return lang_data
     else:
@@ -28,10 +31,14 @@ def get_string(lang: str, key: str) -> str:
     return lang_strings.get(key, f"Missing translation for key '{key}'")
 
 def get_languages() -> Dict[str, str]:
-    return {lang: data["language"] for lang, data in languages.items()}
+    return {lang: data.get("language", "") for lang, data in languages.items()}
 
 def get_language(language: str) -> str:
-    return languages[language]["language"]
+    lang_data = languages.get(language)
+    if lang_data:
+        return lang_data.get("language", "")
+    else:
+        return ""
 
 def setup_localization() -> None:
     lang_files = os.listdir("locales")
