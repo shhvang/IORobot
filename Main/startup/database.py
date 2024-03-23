@@ -30,7 +30,7 @@ class Database:
             self.Session.close_all()
 
     def get_session(self) -> scoped_session:
-        return self.Session
+        return self.Session()
 
     def get_base(self):
         return self.Base
@@ -38,3 +38,8 @@ class Database:
     def get_engine(self):
         return self.engine
 
+    def __enter__(self):
+        return self.get_session()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
