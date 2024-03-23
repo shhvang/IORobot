@@ -1,20 +1,39 @@
-import os
+from Main import LOGS
+from Main.startup.loader import Loader
+import inspect
 
-def get_all_files(path, extension=None):
-    """
-    Get a list of all files in a directory and its subdirectories.
+class Attributes:
+    IMPORTED = {}
+    MIGRATEABLE = []
+    HELPABLE = {}
+    STATS = []
+    USER_INFO = []
+    DATA_IMPORT = []
+    DATA_EXPORT = []
+    CHAT_SETTINGS = {}
+    USER_SETTINGS = {}
+
+
+def load_all_modules():
+    try:
+        loaded_modules = Loader('./plugins').import_module(log=True)
+    except Exception as e:
+        LOGS.error(f"Error loading modules: {e}")
+        return
+
+    Attributes.IMPORTED = {
+        getattr(m, "__mod_name__", m.__name__.capitalize()): m
+        for m in loaded_modules if inspect.ismodule(m)
+    }
     
-    Args:
-        path (str): The path to the directory.
-        extension (str, optional): Filter by file extension. If provided, only files
-            with this extension will be included. Defaults to None.
+    if len(Attributes.IMPORTED) != len(loaded_modules):
+        LOGS.warning("Some loaded items are not modules.")
     
-    Returns:
-        list: A sorted list of file paths.
-    """
-    filelist = []
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            if not (extension and not file.endswith(extension)):
-                filelist.append(os.path.join(root, file))
-    return sorted(filelist)
+    for attr in ['get_help', '__migrate__', '__stats__', '__user_info__', 
+                 '__import_data__', '__export_data__', '__chat_settings__', '__user_settings__']:
+        setattr(
+            Attributes, attr.upper(), 
+            {name.lower(): m for name, m in Attributes.IMPORTED.items() if hasattr(m, attr)}
+        )
+
+    LOGS.info(f'Successfully Loaded Plugins: {str(loaded_modules)}')
