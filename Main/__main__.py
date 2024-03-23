@@ -10,6 +10,8 @@ from . import (
 
 from Main.langs import setup_localization
 from Main.utils.decorators import kiyocmd
+from Main.startup.helpers import load_all_modules
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
@@ -20,6 +22,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     setup_localization()
+    load_all_modules()
     LOGS.info('[KIYO] Started Using long polling.')
     application.run_polling()
 
