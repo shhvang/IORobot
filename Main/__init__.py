@@ -15,8 +15,9 @@ start_time = time.time()
 Logger()
 LOGS = getLogger('Kiyo')
 LOGS.info(
-    f"Starting Development, Kiyo (python-telegram-bot: {__version__})\n",
-    f"Python version - {platform.python_version()}"
+    "[KIYO] Starting Development, (python: %s) - python-telegram-bot: v%s",
+    platform.python_version(),
+    __version__,
 )
 
 def isLocalHost():
@@ -30,10 +31,7 @@ application = (
     .build()
 )
 
-uri = config.DATABASE_URI
-if uri and uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
 
 db = Database(
-        uri, db_type='postgresql', pool_size=10, max_overflow=20, debug=False
+        config.DATABASE_URI, db_type='postgresql', pool_size=10, max_overflow=20, debug=False
     )
