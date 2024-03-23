@@ -4,6 +4,8 @@ import os
 from pathlib import Path
 from typing import List, Optional, Union
 
+from Main import LOGS
+
 class Loader:
     def __init__(self, path: str):
         self.path = path
@@ -15,7 +17,7 @@ class Loader:
         all_modules = []
 
         if not directory_path.exists() or not directory_path.is_dir():
-            logging.error(f"Directory {directory_path} does not exist or is not accessible")
+            LOGS.error(f"Directory {directory_path} does not exist or is not accessible")
             return []
 
         for root, _, files in os.walk(self.path):
@@ -50,14 +52,14 @@ class Loader:
                 spec.loader.exec_module(module)
                 self._initialize_module(module)
                 if log:
-                    logging.info(f"Loaded \"{module_name}\" from \"{module_path}\"")
+                    LOGS.info(f"Loaded \"{module_name}\" from \"{module_path}\"")
                 loaded_modules.append(module_name)
             except Exception as e:
                 if log:
-                    logging.error(f"Error loading \"{module_name}\": {e}")
+                    LOGS.error(f"Error loading \"{module_name}\": {e}")
 
         if log:
-            logging.info(
+            LOGS.info(
                 f'Successfully loaded {len(loaded_modules)} module{"s" if len(loaded_modules) != 1 else ""}'
             )
 
