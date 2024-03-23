@@ -1,12 +1,10 @@
-                                              '''Authors / Shubhansh - Shivang'''
+authors: "Aruoto/Shivang"     
 
-#Languages
 language: "English 🇺🇲"
 
 curr_chat_lang: "Hey. Your current language is {}, select the one you want from the buttons below :)"
 set_chat_lang: "Great, {} it is from now on!"
 
-#Start
 start_string: "I'm {}\nuptime: `{}`"
 private_start: "Hi {}, I am {}!\npowered by @iOpacity\n\nA strong Group Management bot running on a high-speed server.\nRecruit me for smooth operations in your GCs\n\nCheck commands to get information about my modules"
 help_string: "Choose the help module.\nAsk your doubts at [Support Chat]\n\nAll commands can be used with : /"
