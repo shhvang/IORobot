@@ -1,6 +1,7 @@
 import time
 from telegram import Update
 from telegram.ext import ContextTypes
+from telegram.constants import ParseMode
 
 from Main.utils.decorators import kiyocmd
 from Main import start_time
@@ -18,6 +19,10 @@ def get_readable_time(seconds: int) -> str:
 
 @kiyocmd('start')
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.effective_message.reply_text(
-        f"Hi, I'm {context.bot.first_name}\nuptime: {get_readable_time(int(time.time() - start_time))}"
-    )
+    if update.effective_chat.type == "private":
+        pass
+    else:
+        await update.effective_message.reply_text(
+            f"Hi, I'm {context.bot.first_name}\nuptime: `{get_readable_time(int(time.time() - start_time))}`",
+            parse_mode=ParseMode.MARKDOWN,
+        )
