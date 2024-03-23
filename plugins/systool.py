@@ -23,7 +23,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat.type == "private":
         return await update.effective_message.reply_text(
             tlang(update.effective_chat.id, 'private_start').format(
-                context.effective_user.first_name, context.bot.first_name 
+               update.effective_user.first_name, context.bot.first_name 
             ),
             parse_mode=ParseMode.MARKDOWN,
         )
