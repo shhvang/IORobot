@@ -1,5 +1,3 @@
-import time
-
 from . import (
     db,
     application,
@@ -7,7 +5,6 @@ from . import (
     start_time,
     config,
 )
-
 from Main.langs import setup_localization
 
 def main():
