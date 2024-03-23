@@ -18,6 +18,7 @@ def Logger():
                     level=INFO,
                 )
     
+    getLogger('sqlalchemy').setLevel(WARNING)
     getLogger('psycopg2').setLevel(WARNING)
     getLogger('ptbcontrib.postgres_persistence.postgrespersistence').setLevel(WARNING)
     getLogger('apscheduler.scheduler').setLevel(INFO)
