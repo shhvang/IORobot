@@ -1,3 +1,5 @@
+import time
+
 from . import (
     db,
     application,
@@ -5,7 +7,16 @@ from . import (
     start_time,
     config,
 )
+
 from Main.langs import setup_localization
+from Main.utils.decorators import kiyocmd
+from telegram import Update
+from telegram.ext import ContextTypes
+
+@kiyocmd('start')
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_message.reply_text(f"Hi, I'm {context.bot.first_name}")
+    
 
 def main():
     setup_localization()
