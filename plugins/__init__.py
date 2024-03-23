@@ -1,5 +1,5 @@
 from Main import *
-from Main.decorators import *
+from Main.utils.decorators import *
 
 from Main.langs import *
 
