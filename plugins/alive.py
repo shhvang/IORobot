@@ -13,7 +13,7 @@ alive_button = [ nvm
 
 @kiyocmd('alive')
 async def alive(update: Update, context: ContextTypes.DEFAULTYPE):
-    await update.effective_message.reply_text(
+    return update.effective_message.reply_text(
         tlang(update.effective_chat.id, 'alive_string').format(
             context.bot.first_name, get_readable_time(int(time.time() - start_time))
             ),
