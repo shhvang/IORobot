@@ -1,7 +1,33 @@
-Token = '7042927041:AAH0QumB94lyhjfN_fTvbkVw0zQ9HL7INqY'
-BaseUrl = 'https://api.telegram.org/bot'
-BaseFileUrl = 'https://api.telegram.org/file/bot'
-DEV_ID = [1, 2, 3]
-SUDO_ID = [1, 2, 3]
-OWNER_ID = [1]
-DATABASE_URI = 'postgresql://tqfhclle:L-s2F6LSSGl-_ij7Qt24fFUwrMBM0m0n@raja.db.elephantsql.com/tqfhclle'
+import os
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+def get_config(key, fallback=None, cast_func=str):
+    value = os.getenv(key)
+    if value is not None:
+        return cast_func(value)
+
+    if config.has_option("kiyo", key):
+        return cast_func(config.get("kiyo", key))
+
+    return fallback
+
+Token = get_config(
+    'Token', fallback='1601619815:AAHHCDk-6nRr0ef5ApBd1oiGVXPrWdZycQY', cast_func=str
+)
+BaseUrl = get_config('BaseUrl', fallback='https://api.telegram.org/bot', cast_func=str)
+BaseFileUrl = get_config('BaseFileUrl', fallback='https://api.telegram.org/file/bot', cast_func=str)
+
+DEV_ID = get_config('DEV_ID', fallback=[1, 2, 3], 
+                    cast_func=lambda x: list(map(int, x.split(',')))
+                    )
+SUDO_ID = get_config('SUDO_ID', fallback=[1, 2, 3], cast_func=lambda x: list(map(int, x.split(','))))
+OWNER_ID = get_config('OWNER_ID', fallback=[1], cast_func=lambda x: list(map(int, x.split(','))))
+
+DATABASE_URI = get_config(
+    'DATABASE_URI', 
+    fallback='postgresql://tqfhclle:L-s2F6LSSGl-_ij7Qt24fFUwrMBM0m0n@raja.db.elephantsql.com/tqfhclle', 
+    cast_func=str
+)
