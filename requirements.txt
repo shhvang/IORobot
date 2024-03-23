@@ -6,3 +6,4 @@ sqlalchemy
 cachetools
 psycopg2-binary
 importlib-metadata
+pyyaml
