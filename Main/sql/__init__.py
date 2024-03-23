@@ -1,5 +1,4 @@
-from Main import sql
+from Main import db
 
-sql.connect()
-SESSION = sql.get_session()
-BASE = sql.get_base()
+Session = db.get_session()
+Base = db.get_base()
