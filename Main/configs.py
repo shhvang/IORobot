@@ -15,7 +15,7 @@ def get_config(key, fallback=None, cast_func=str):
     return fallback
 
 Token = get_config(
-    'Token', fallback='1601619815:AAHHCDk-6nRr0ef5ApBd1oiGVXPrWdZycQY', cast_func=str
+    'Token', fallback='7042927041:AAFbS4H_RthM70wng9LhgMxEKS5jo4wXScc', cast_func=str
 )
 BaseUrl = get_config('BaseUrl', fallback='https://api.telegram.org/bot', cast_func=str)
 BaseFileUrl = get_config('BaseFileUrl', fallback='https://api.telegram.org/file/bot', cast_func=str)
