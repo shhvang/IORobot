@@ -7,7 +7,7 @@ def Logger():
     log_path = pathlib.Path('./Main/logger/') / f'kiyo.log'
     log_path.parent.mkdir(parents=True, exist_ok=True)
     captureWarnings(True)
-    basicConfig(format='[%(asctime)s] - [Yuii] << %(levelname)s >> %(name)s - %(message)s',
+    basicConfig(format='[%(asctime)s] - [IOpacity] << %(levelname)s >> %(name)s - %(message)s',
                 datefmt='%d-%b-%y %H:%M:%S',
                 handlers=[
                     RotatingFileHandler(
