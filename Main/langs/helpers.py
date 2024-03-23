@@ -1,9 +1,11 @@
-import logging
 import os
 from typing import Dict
 import yaml
 import functools
 from pathlib import Path
+from logging import getLogger
+
+LOGS = getLogger('Kiyo')
 
 lang_strings_cache = {}
 languages = {}
@@ -17,7 +19,7 @@ def reload_strings(lang_code: str = "en") -> Dict[str, str]:
             languages[lang_code] = lang_data  # Store in languages
             return lang_data
     else:
-        logging.info(f"Localization file not found for '{lang_code}'")
+        LOGS.info(f"Localization file not found for '{lang_code}'")
         return {}
 
 def get_string(lang: str, key: str) -> str:
@@ -36,8 +38,8 @@ def get_language(language: str) -> str:
 def setup_localization() -> None:
     lang_files = os.listdir("locales")
     if not lang_files:
-        logging.info("Localization files not found!")
-        logging.info("Using the default language - English.")
+        LOGS.info("Localization files not found!")
+        LOGS.info("Using the default language - English.")
         reload_strings() 
     else:
-        logging.info("Localization setup complete!")
+        LOGS.info("Localization setup complete!")
