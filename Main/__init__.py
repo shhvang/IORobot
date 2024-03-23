@@ -31,7 +31,6 @@ application = (
     .build()
 )
 
-
 db = Database(
         config.DATABASE_URI, db_type='postgresql', pool_size=10, max_overflow=20, debug=False
     )
