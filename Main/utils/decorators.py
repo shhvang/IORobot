@@ -1,7 +1,7 @@
 import time, logging
 from cachetools import LRUCache
 from telegram import Update
-from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler, InlineQueryHandler, CallbackContext, filters
+from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler, InlineQueryHandler, CallbackContext, filters, ContextTypes
 from telegram.ext.filters import BaseFilter
 from Main import application
 from Main import config
@@ -31,30 +31,11 @@ def rate_limit(messages_per_window: int, window_seconds: int):
         return wrapper
     return decorator
 
-def kiyocmd(
-    command, only_group: bool = False, admin_required: bool = False, group: Optional[int] = 40, dev_plus: bool = False, sudo_plus: bool = False,
-) -> Callable:
+def kiyocmd(command):
     def decorator(func):
-         async def wrapper(update: Update, context: CallbackContext):
-            chat = update.effective_chat
-            if only_group and chat.type != 'private':
-                await update.effective_message.reply_text('this cmd only work in groups.')
-            if dev_plus:
-                filterm = (
-                    filters.USER(config.DEV_ID, config.OWNER_ID)
-                )
-                await update.effective_message.reply_text('this cmd is only for dev users')
-            if sudo_plus:
-                filterm = (
-                    filters.USER(config.DEV_ID, config.OWNER_ID, config.SUDO_ID)
-                )
-            application.add_handler(
-                CommandHandler(
-                    command, func, filters=filterm
-                    ), group=group
-                )
-            return await func(update, context)
-         return wrapper
+        handler = CommandHandler(command, func)
+        application.add_handler(handler)
+        return func
     return decorator
 
 def kiyocallback(pattern: str = None) -> Callable:
