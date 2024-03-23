@@ -4,4 +4,4 @@ BaseFileUrl = 'https://api.telegram.org/file/bot'
 DEV_ID = [1, 2, 3]
 SUDO_ID = [1, 2, 3]
 OWNER_ID = [1]
-DATABASE_URI = 'postgres://nqyhsrvj:jNMA58anP8DSejhy6xsepJi991E9H5Zb@ruby.db.elephantsql.com/nqyhsrvj'
+DATABASE_URI = 'postgresql://tqfhclle:L-s2F6LSSGl-_ij7Qt24fFUwrMBM0m0n@raja.db.elephantsql.com/tqfhclle'
