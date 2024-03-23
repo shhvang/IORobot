@@ -3,9 +3,7 @@ from typing import Dict
 import yaml
 import functools
 from pathlib import Path
-from logging import getLogger
-
-LOGS = getLogger('Kiyo')
+from Main import LOGS
 
 lang_strings_cache = {}
 languages = {}

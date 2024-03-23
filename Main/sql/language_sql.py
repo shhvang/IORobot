@@ -15,6 +15,7 @@ class ChatLangs(Base):
     def __repr__(self):
         return f"<ChatLangs(chat_id='{self.chat_id}', language='{self.language}')>"
 
+# Create the table
 Base.metadata.create_all(bind=Session.get_bind(), checkfirst=True)
 
 CHAT_LANG = {}

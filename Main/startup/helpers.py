@@ -36,4 +36,4 @@ def load_all_modules():
             {name.lower(): m for name, m in Attributes.IMPORTED.items() if hasattr(m, attr)}
         )
 
-    LOGS.info(f'Loaded Plugins: {str(loaded_modules)}')
+    LOGS.info(f'Successfully Loaded Plugins: {str(loaded_modules)}')
