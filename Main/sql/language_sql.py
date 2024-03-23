@@ -1,39 +1,38 @@
 import threading
-
 from sqlalchemy import Column, String, UnicodeText
-from Main.sql import SESSION, BASE
+from Main.sql import Session, Base
 
 
-class ChatLangs(BASE):
+class ChatLangs(Base):
     __tablename__ = "chatlangs"
     chat_id = Column(String(14), primary_key=True)
     language = Column(UnicodeText)
 
     def __init__(self, chat_id, language):
-        self.chat_id = str(chat_id)  # ensure string
+        self.chat_id = str(chat_id)  
         self.language = language
 
     def __repr__(self):
-        return "Language {} chat {}".format(self.language, self.chat_id)
+        return f"<ChatLangs(chat_id='{self.chat_id}', language='{self.language}')>"
 
+Base.metadata.create_all(bind=Session.get_bind(), checkfirst=True)
 
 CHAT_LANG = {}
 LANG_LOCK = threading.RLock()
-ChatLangs.__table__.create(checkfirst=True)
 
 
 def set_lang(chat_id: str, lang: str) -> None:
     with LANG_LOCK:
-        curr = SESSION.query(ChatLangs).get(str(chat_id))
+        curr = Session.query(ChatLangs).get(str(chat_id))
         if not curr:
             curr = ChatLangs(str(chat_id), lang)
-            SESSION.add(curr)
-            SESSION.flush()
+            Session.add(curr)
+            Session.flush()
         else:
             curr.language = lang
 
         CHAT_LANG[str(chat_id)] = lang
-        SESSION.commit()
+        Session.commit()
 
 
 def get_chat_lang(chat_id: str) -> str:
@@ -46,10 +45,10 @@ def get_chat_lang(chat_id: str) -> str:
 def __load_chat_language() -> None:
     global CHAT_LANG
     try:
-        allchats = SESSION.query(ChatLangs).all()
+        allchats = Session.query(ChatLangs).all()
         CHAT_LANG = {x.chat_id: x.language for x in allchats}
     finally:
-        SESSION.close()
+        Session.close()
 
 
 __load_chat_language()
