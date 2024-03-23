@@ -1,1 +1,8 @@
+authors: 'aruotoxd'
 
+language: "English 🇺🇲"
+
+curr_chat_lang: "Hey. Your current language is {}, select the one you want from the buttons below :)"
+set_chat_lang: "Great, {} it is from now on!"
+
+start_string: "I'm {}\nuptime: `{}`"
