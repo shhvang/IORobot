@@ -5,13 +5,20 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
 
-RUN apt update -y 
-RUN apt-get -y install gcc
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN apt autoremove -y 
+RUN apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-CMD [ "python3", "-m" , "Main"]
+CMD ["python3", "-m", "Main"]
+
