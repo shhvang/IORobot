@@ -1,4 +1,4 @@
-authors: "Aruoto/Shivang"     
+authors: 'aruotoxd - shivang'
 
 language: "English 🇺🇲"
 
@@ -6,7 +6,19 @@ curr_chat_lang: "Hey. Your current language is {}, select the one you want from 
 set_chat_lang: "Great, {} it is from now on!"
 
 start_string: "I'm {}\nuptime: `{}`"
-private_start: "Hi {}, I am {}!\npowered by @iOpacity\n\nA strong Group Management bot running on a high-speed server.\nRecruit me for smooth operations in your GCs\n\nCheck commands to get information about my modules"
-help_string: "Choose the help module.\nAsk your doubts at [Support Chat]\n\nAll commands can be used with : /"
-alive_string: [ "Heyy! {} here\nI've been working for {} straight",
-"HI, This is {}\nI was refreshed {} ago" ]
+
+support_btn: 'Support'
+update_btn: 'Updates'
+source_btn: 'Source Code'
+inline_btn: 'Try Inline'
+add_btn: 'Add me'
+
+private_start: |
+  Hey *{}*!,
+  I'm *{}*, I make telegram group management simpler for you!
+
+  Click Help button to find out more about how to use me to my full potential.
+  ━━━━━━━━━━━━━━━━━━━━━━━━
+  ⋟ *Uptime:* {}
+
+  If you have any questions, need assistance with something, or just want to have a friendly chat, don't hesitate to reach out.
