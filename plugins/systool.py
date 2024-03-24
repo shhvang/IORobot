@@ -5,7 +5,7 @@ from telegram.constants import ParseMode
 
 from plugins import tlang
 from Main.utils.decorators import kiyocmd
-from Main.utils.string_handler import get_readable_time
+from Main.utils.string_handlers import get_readable_time
 from Main import start_time
 
 @kiyocmd('start')
