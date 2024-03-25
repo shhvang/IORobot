@@ -7,11 +7,12 @@ from telegram import (
     Message,
     Update,
     User,
-    ParseMode,
 )
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, filters
 from telegram.helpers import escape_markdown
+from telegram.constants import ParseMode
+from Main.utils.string_handler import markdown_parser
 
 from plugins import tlang
 from Main import application
@@ -20,8 +21,8 @@ from Main.utils.decorators import kiyocmd, rate_limit
 
 @kiyocmd('rules')
 @rate_limit(40, 60)
-async def send_rules(update, chat_id, from_pm=False):
-    bot = application.bot
+async def send_rules(update: Update, chat_id, from_pm=False):
+    bot = application.updater.bot
     message = update.effective_message
     try:
         chat = bot.get_chat(chat_id)
