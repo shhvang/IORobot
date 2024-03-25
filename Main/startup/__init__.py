@@ -1,4 +1,4 @@
-import pathlib, os
+import pathlib, os, configparser
 from logging.handlers import RotatingFileHandler, MemoryHandler
 from logging import captureWarnings, basicConfig, StreamHandler, WARNING, INFO, DEBUG, getLogger
 
@@ -7,7 +7,7 @@ def Logger():
     path.parent.mkdir(parents=True, exist_ok=True)
 
     _LOGS = getLogger('Kiyo')
-    _LOG_FMT = '%(asctime)s | %(name)s [%(levelname)s] : %(messagse)s'
+    _LOG_FMT = '%(asctime)s | %(name)s [%(levelname)s] : %(message)s'
 
     getLogger('sqlalchemy.engine').setLevel(WARNING)
     getLogger('psycopg2').setLevel(WARNING)
@@ -39,4 +39,16 @@ def Logger():
 
 def isLocalHost():
     return os.path.exists("./localhost.txt")
+
+def get_config(key, fallback=None, cast_func=str):
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    value = os.getenv(key)
+    if value is not None:
+        return cast_func(value)
+
+    if config.has_option("kiyo", key):
+        return cast_func(config.get("kiyo", key))
+
+    return fallback
 
