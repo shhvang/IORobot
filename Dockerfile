@@ -10,8 +10,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+RUN pip install --no-cache-dir \
+    coloredlogs \
+    sqlalchemy \
+    cachetools \
+    psycopg2-binary \
+    importlib-metadata \
+    pyyaml \
+    httpx
 
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
@@ -21,4 +29,3 @@ RUN apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 CMD ["python3", "-m", "Main"]
-
