@@ -2,13 +2,12 @@ import time, os
 import platform
 
 from logging import getLogger
-
-from Main import configs as config
-from Main.startup.database import Database
-from Main.startup import Logger
-
 from telegram.ext import ApplicationBuilder
 from telegram import __version__
+
+from Main.startup.database import Database
+from Main import configs as config
+from Main.startup import Logger
 
 start_time = time.time()
 
@@ -20,14 +19,11 @@ LOGS.info(
     __version__,
 )
 
-def isLocalHost():
-    return os.path.exists("./localhost.txt")
-
 application = (
     ApplicationBuilder()
     .token(config.Token)
-    .base_url(config.BaseUrl)
-    .base_file_url(config.BaseFileUrl)
+    .base_url(config.BASE_URL)
+    .base_file_url(config.BASE_FILE_URL)
     .build()
 )
 
