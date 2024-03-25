@@ -1,9 +1,3 @@
-httpx
 python-telegram-bot[all]
 python-decouple
 python-dotenv
-sqlalchemy
-cachetools
-psycopg2-binary
-importlib-metadata
-pyyaml
