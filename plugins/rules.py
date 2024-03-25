@@ -26,7 +26,7 @@ async def send_rules(update: Update, chat_id, from_pm=False):
     bot = application.updater.bot
     message = update.effective_message
     try:
-        chat = bot.get_chat(chat_id)
+        chat = await bot.get_chat(chat_id)
     except BadRequest as excp:
         if excp.message != "Chat not found" or not from_pm:
             raise
@@ -75,18 +75,19 @@ async def send_rules(update: Update, chat_id, from_pm=False):
 @kiyocmd('setrules')
 @rate_limit(40, 60)
 async def set_rules(update: Update, context: CallbackContext):
-  chat_id = update.effective_chat.id
-  message = update.effective_message  # type: Optional[Message]
-  raw_text = message.text
-  args = raw_text.split(None, 1)  # use python's maxsplit to separate cmd and args
-  if len(args) == 2:
-      txt = args[1]
-      offset = len(txt) - len(raw_text)  # set correct offset relative to command
-      markdown_rules = markdown_parser(
-          txt, entities=message.parse_entities(), offset=offset
-      )
+    chat_id = update.effective_chat.id
+    message = update.effective_message  # type: Optional[Message]
+    raw_text = message.text
+    args = raw_text.split(None, 1)  # use python's maxsplit to separate cmd and args
+    if len(args) == 2:
+        txt = args[1]
+        offset = len(txt) - len(raw_text)  # set correct offset relative to command
+        markdown_rules = markdown_parser(
+            txt, entities=message.parse_entities(), offset=offset
+        )
 
-      sql.set_rules(chat_id, markdown_rules)
-      await update.effective_message.reply_text("Successfully set rules for this group.")
+        sql.set_rules(chat_id, markdown_rules)
+        await update.effective_message.reply_text("Successfully set rules for this group.")
 
-application.add_handler(CommandHandler(get_rules, 'rules', filters=filters.ChatType.GROUPS))
+# Add CommandHandler with the correct command string 'rules'
+application.add_handler(CommandHandler('rules', get_rules, filters=filters.ChatType.GROUPS))
