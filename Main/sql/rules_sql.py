@@ -1,7 +1,6 @@
 import threading
-
-from Main.sql import Base, Session
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String, UnicodeText, distinct, func
+from . import Base, Session
 
 class Rules(Base):
     __tablename__ = "rules"
@@ -14,11 +13,9 @@ class Rules(Base):
     def __repr__(self):
         return "<Chat {} rules: {}>".format(self.chat_id, self.rules)
 
-
-Rules.__table__.create(checkfirst=True)
+Base.metadata.create_all(bind=Session.get_bind(), checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
-
 
 def set_rules(chat_id, rules_text):
     with INSERTION_LOCK:
@@ -27,30 +24,32 @@ def set_rules(chat_id, rules_text):
             rules = Rules(str(chat_id))
         rules.rules = rules_text
 
-        Session.add(rules)
-        Session.commit()
-
+        session = Session
+        session.add(rules)
+        session.commit()
+        session.close()
 
 def get_rules(chat_id):
-    rules = Session.query(Rules).get(str(chat_id))
+    session = Session
+    rules = session.query(Rules).get(str(chat_id))
     ret = ""
     if rules:
         ret = rules.rules
-
-    Session.close()
+    session.close()
     return ret
-
 
 def num_chats():
     try:
-        return Session.query(func.count(distinct(Rules.chat_id))).scalar()
+        session = Session
+        return session.query(func.count(distinct(Rules.chat_id))).scalar()
     finally:
-        Session.close()
-
+        session.close()
 
 def migrate_chat(old_chat_id, new_chat_id):
     with INSERTION_LOCK:
-        chat = Session.query(Rules).get(str(old_chat_id))
+        session = Session
+        chat = session.query(Rules).get(str(old_chat_id))
         if chat:
             chat.chat_id = str(new_chat_id)
-        Session.commit()
+        session.commit()
+        session.close()
