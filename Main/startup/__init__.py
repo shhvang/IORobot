@@ -1,4 +1,4 @@
-import pathlib
+import pathlib, os
 from logging.handlers import RotatingFileHandler, MemoryHandler
 from logging import captureWarnings, basicConfig, StreamHandler, WARNING, INFO, DEBUG, getLogger
 
@@ -36,3 +36,7 @@ def Logger():
         pass
     
     _LOGS.info('Initialized Logger!')
+
+def isLocalHost():
+    return os.path.exists("./localhost.txt")
+
