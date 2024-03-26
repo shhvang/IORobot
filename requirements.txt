@@ -8,3 +8,4 @@ psycopg2-binary
 importlib-metadata
 pyyaml
 colouredlogs
+bleach
