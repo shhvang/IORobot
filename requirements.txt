@@ -10,3 +10,4 @@ pyyaml
 colouredlogs
 bleach
 markdown2
+emoji
