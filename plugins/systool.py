@@ -18,33 +18,34 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                update.effective_user.first_name, context.bot.first_name, 
                get_readable_time(int(time.time() - start_time))
             ),
-            reply_markup=InlineKeyboardMarkup([
+            reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton(
-                        f'(tlang(chat.id, 'support_btn'))', 
-                        url='https://t.me/IOSupportGroup'
-                    ),
-                    InlineKeyboardButton(
-                        f'(tlang(chat.id, 'update_btn'))', 
-                        url='https://t.me/IOUpdate'
-                    ),
-                    InlineKeyboardButton(
-                        f'((tlang(chat.id, 'source_btn')))', 
-                        url='https://github.com/iOpacity/rKiyoBot'
-                    )
-                ],
-                [
-                    InlineKeyboardButton(
-                        f'{(tlang(chat.id, 'inline_btn'))}', 
-                        switch_inline_query_current_chat=""
-                    ),
-                    InlineKeyboardButton(
-                        f'{(tlang(chat.id, 'add_btn'))}', 
-                        url='https://t.me/rKiyoBot?startgroup=true'
-                    )
-                ]
-            ]
-        ),
+                    [
+                        InlineKeyboardButton(
+                            f'{tlang(chat.id, 'support_btn')}', 
+                            url='https://t.me/IOSupportGroup'
+                        ),
+                        InlineKeyboardButton(
+                            f'{tlang(chat.id, 'update_btn')}', 
+                            url='https://t.me/IOUpdate'
+                        ),
+                        InlineKeyboardButton(
+                            f'{tlang(chat.id, 'source_btn')}', 
+                            url='https://github.com/iOpacity/rKiyoBot'
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            f'{tlang(chat.id, 'inline_btn')}', 
+                            switch_inline_query_current_chat=""
+                        ),
+                        InlineKeyboardButton(
+                            f'{tlang(chat.id, 'add_btn')}', 
+                            url='https://t.me/rKiyoBot?startgroup=true'
+                        )
+                    ]
+                 ]
+              ),
             parse_mode=ParseMode.MARKDOWN,
         )
     else:
