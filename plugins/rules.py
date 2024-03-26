@@ -1,3 +1,4 @@
+# add translation if added than remove this comment
 from typing import Optional
 import Main.sql.rules_sql as sql
 
