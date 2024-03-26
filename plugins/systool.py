@@ -22,25 +22,25 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 [
                     [
                         InlineKeyboardButton(
-                            f'{tlang(chat.id, 'support_btn')}', 
+                            text=f"{tlang(chat.id, 'support_btn')}", 
                             url='https://t.me/IOSupportGroup'
                         ),
                         InlineKeyboardButton(
-                            f'{tlang(chat.id, 'update_btn')}', 
+                            text=f"{tlang(chat.id, 'update_btn')}", 
                             url='https://t.me/IOUpdate'
                         ),
                         InlineKeyboardButton(
-                            f'{tlang(chat.id, 'source_btn')}', 
+                            text=f"{tlang(chat.id, 'source_btn')}", 
                             url='https://github.com/iOpacity/rKiyoBot'
                         )
                     ],
                     [
                         InlineKeyboardButton(
-                            f'{tlang(chat.id, 'inline_btn')}', 
+                            text=f"{tlang(chat.id, 'inline_btn')}", 
                             switch_inline_query_current_chat=""
                         ),
                         InlineKeyboardButton(
-                            f'{tlang(chat.id, 'add_btn')}', 
+                            text=f"{tlang(chat.id, 'add_btn')}", 
                             url='https://t.me/rKiyoBot?startgroup=true'
                         )
                     ]
