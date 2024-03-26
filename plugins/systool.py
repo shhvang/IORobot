@@ -14,7 +14,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     if chat.type == "private":
         return await message.reply_video(
-            video='https://i.imgur.com/wf7DcAh.mp4',
             caption=tlang(chat.id, 'private_start').format(
                update.effective_user.first_name, context.bot.first_name, 
                get_readable_time(int(time.time() - start_time))
@@ -22,15 +21,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=InlineKeyboardMarkup([
                 [
                     InlineKeyboardButton(
-                        f'{(tlang(chat.id, 'support_btn'))}', 
-                        url='https://t.me/AyakaSupport'
+                        f'(tlang(chat.id, 'support_btn'))', 
+                        url='https://t.me/IOSupportGroup'
                     ),
                     InlineKeyboardButton(
-                        f'{(tlang(chat.id, 'update_btn'))}', 
-                        url='https://t.me/AyakaUpdates'
+                        f'(tlang(chat.id, 'update_btn'))', 
+                        url='https://t.me/IOUpdate'
                     ),
                     InlineKeyboardButton(
-                        f'{((tlang(chat.id, 'source_btn')))}', 
+                        f'((tlang(chat.id, 'source_btn')))', 
                         url='https://github.com/iOpacity/rKiyoBot'
                     )
                 ],
@@ -41,7 +40,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     ),
                     InlineKeyboardButton(
                         f'{(tlang(chat.id, 'add_btn'))}', 
-                        url='https://t.me/ayaka_robot?startgroup=true'
+                        url='https://t.me/rKiyoBot?startgroup=true'
                     )
                 ]
             ]
