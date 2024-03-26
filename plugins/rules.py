@@ -12,7 +12,7 @@ from telegram.error import BadRequest
 from telegram.ext import CallbackContext, filters, CommandHandler
 from telegram.helpers import escape_markdown
 from telegram.constants import ParseMode
-from Main.utils.string_handler import markdown_parser
+from Main.utils.string_handlers import markdown_parser
 
 from plugins import tlang
 from Main import application
