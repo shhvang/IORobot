@@ -13,6 +13,11 @@ start_time = time.time()
 
 Logger()
 LOGS = getLogger('Kiyo')
+
+class Config:
+    pass
+
+
 LOGS.info(
     "[KIYO] Starting Development, (python: %s) - python-telegram-bot: v%s",
     platform.python_version(),
