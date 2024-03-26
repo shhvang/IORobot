@@ -9,3 +9,4 @@ importlib-metadata
 pyyaml
 colouredlogs
 bleach
+markdown2
