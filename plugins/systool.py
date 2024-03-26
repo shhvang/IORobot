@@ -13,8 +13,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     message = update.effective_message
     if chat.type == "private":
-        return await message.reply_video(
-            caption=tlang(chat.id, 'private_start').format(
+        return await message.reply_text(
+            tlang(chat.id, 'private_start').format(
                update.effective_user.first_name, context.bot.first_name, 
                get_readable_time(int(time.time() - start_time))
             ),
