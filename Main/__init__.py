@@ -1,4 +1,4 @@
-import time, os
+import time
 import platform
 
 from logging import getLogger
@@ -22,8 +22,8 @@ LOGS.info(
 application = (
     ApplicationBuilder()
     .token(config.Token)
-    .base_url(config.BaseUrl)
-    .base_file_url(config.BaseFileUrl)
+    .base_url(config.BASE_URL)
+    .base_file_url(config.BASE_FILE_URL)
     .build()
 )
 
