@@ -1,10 +1,10 @@
 from Main.startup import get_config
 
 Token = get_config(
-    'Token', fallback='7042927041:AAFbS4H_RthM70wng9LhgMxEKS5jo4wXScc', cast_func=str
+    'Token', fallback='1601619815:AAHHCDk-6nRr0ef5ApBd1oiGVXPrWdZycQY', cast_func=str
 )
-BaseUrl = get_config('BaseUrl', fallback='https://api.telegram.org/bot', cast_func=str)
-BaseFileUrl = get_config('BaseFileUrl', fallback='https://api.telegram.org/file/bot', cast_func=str)
+BASE_URL = get_config('BaseUrl', fallback='https://api.telegram.org/bot', cast_func=str)
+BASE_FILE_URL = get_config('BaseFileUrl', fallback='https://api.telegram.org/file/bot', cast_func=str)
 
 DEV_ID = get_config('DEV_ID', fallback=[1, 2, 3], 
                     cast_func=lambda x: list(map(int, x.split(',')))
