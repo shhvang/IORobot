@@ -1,13 +1,14 @@
 import pathlib, os, configparser
 from logging.handlers import RotatingFileHandler, MemoryHandler
 from logging import captureWarnings, basicConfig, StreamHandler, WARNING, INFO, DEBUG, getLogger
+from colorama import init, Fore, Style
 
 def Logger():
     path = pathlib.Path('./Main/logger') / 'kiyo.log'
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    _LOGS = getLogger('Kiyo')
-    _LOG_FMT = '%(asctime)s | %(name)s [%(levelname)s] : %(message)s'
+    _LOGS = getLogger(__name__)
+    _LOG_FMT = f'{Fore.GREEN}%(asctime)s{Style.RESET_ALL} | {Fore.CYAN}%(name)s{Style.RESET_ALL} [{Fore.YELLOW}%(levelname)s{Style.RESET_ALL}] : %(message)s'
 
     getLogger('sqlalchemy.engine').setLevel(WARNING)
     getLogger('psycopg2').setLevel(WARNING)
@@ -28,13 +29,8 @@ def Logger():
                     ],
                     level=INFO,
                 )
-    try:
-        import coloredlogs
-
-        coloredlogs.install(level=None, logger=_LOGS, fmt=_LOG_FMT)
-    except ImportError:
-        pass
     
+    init(autoreset=True)
     _LOGS.info('Initialized Logger!')
 
 def isLocalHost():
@@ -51,4 +47,3 @@ def get_config(key, fallback=None, cast_func=str):
         return cast_func(config.get("kiyo", key))
 
     return fallback
-
