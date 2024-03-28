@@ -44,7 +44,7 @@ class TornadoLogFormatter(logging.Formatter):
             formatted = f"{formatted.rstrip()}\n{record.exc_text}"
         return formatted.replace("\n", "\n    ")
 
-LOGS = Logging.getLogger('Kiyo')
+LOGS = logging.getLogger('Kiyo')
 
 def enablelogging(level=logging.DEBUG, handler=None, color=None):
     """
