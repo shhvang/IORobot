@@ -1,6 +1,7 @@
 import sys
 import time
-import logging
+import logging, pathlib
+from logging.handlers import RotatingFileHandler 
 
 class TornadoLogFormatter(logging.Formatter):
     colors = {
@@ -53,6 +54,8 @@ def enablelogging(level=logging.DEBUG, handler=None, color=None):
         handler: Optional handler (defaults to StreamHandler).
         color: Boolean to force color (default: autodetect based on terminal support).
     """
+    path = pathlib.Path('./Main/logger') / 'kiyo.log'
+    path.parent.mkdir(parents=True, exist_ok=True)
     logger = logging.getLogger()
 
     logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
@@ -61,7 +64,9 @@ def enablelogging(level=logging.DEBUG, handler=None, color=None):
     logging.getLogger('apscheduler.scheduler').setLevel(logging.INFO)
     logging.getLogger("httpx").setLevel(logging.WARNING)
     if handler is None:
-        handler = logging.StreamHandler()
+        handler = RotatingFileHandler(
+            path, maxBytes=1024 * 1024, backupCount=5, encoding='utf-8'
+        )
     formatter = TornadoLogFormatter()
 
     if color is None:
