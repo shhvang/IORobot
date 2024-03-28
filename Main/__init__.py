@@ -1,22 +1,19 @@
 import time
 import platform
 
-from logging import getLogger
 from telegram.ext import ApplicationBuilder
-from telegram import __version__
 
-from Main.startup.database import Database
 from Main import configs as config
-from Main.startup import Logger
+from Main.lib.nicelogger import LOGS, enablelogging 
+from Main.startup.database import Database
 
 start_time = time.time()
 
-Logger()
-LOGS = getLogger('Kiyo')
+enablelogging(level=logging.INFO, color=True)
+
 LOGS.info(
-    "[KIYO] Starting Development, (python: %s) - python-telegram-bot: v%s",
-    platform.python_version(),
-    __version__,
+    "Starting Development, (python: %s)", 
+     platform.python_version(),
 )
 
 application = (
