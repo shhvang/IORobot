@@ -44,6 +44,7 @@ class TornadoLogFormatter(logging.Formatter):
             formatted = f"{formatted.rstrip()}\n{record.exc_text}"
         return formatted.replace("\n", "\n    ")
 
+LOGS = Logging.getLogger('Kiyo')
 
 def enablelogging(level=logging.DEBUG, handler=None, color=None):
     """
@@ -56,7 +57,6 @@ def enablelogging(level=logging.DEBUG, handler=None, color=None):
     """
     path = pathlib.Path('./Main/logger') / 'kiyo.log'
     path.parent.mkdir(parents=True, exist_ok=True)
-    logger = logging.getLogger()
 
     logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
     logging.getLogger('psycopg2').setLevel(logging.WARNING)
@@ -90,6 +90,7 @@ def enablelogging(level=logging.DEBUG, handler=None, color=None):
         }
     handler.setLevel(level)
     handler.setFormatter(formatter)
-    logger.setLevel(level)
-    logger.addHandler(handler)
+    LOGS.setLevel(level)
+    LOGS.addHandler(handler)
+    
 
