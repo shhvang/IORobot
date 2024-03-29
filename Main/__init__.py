@@ -5,7 +5,7 @@ from telegram.ext import ApplicationBuilder
 
 from Main import configs as config
 from Main.lib.nicelogger import LOGS, enablelogging 
-from Main.startup.database import Database
+from Main.database import Database
 
 start_time = time.time()
 
