@@ -1,106 +1,92 @@
 import sys
 import time
-import logging, pathlib
-from logging.handlers import RotatingFileHandler 
+import logging
+import pathlib
+import loguru
+from logging.handlers import RotatingFileHandler
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # avoid sphinx autodoc resolve annotation failed
+    # because loguru module do not have `Logger` class actually
+    from loguru import Logger, Record
+
+logger: "Logger" = loguru.logger
 
 class TornadoLogFormatter(logging.Formatter):
+    """
+    Advanced Loguru-based formatter for Tornado-style logging.
+    """
     colors = {
-        logging.DEBUG: "\033[94m",  # Blue
-        logging.INFO: "\033[92m",   # Green
-        logging.WARNING: "\033[93m",  # Yellow
-        logging.ERROR: "\033[91m",   # Red
-        logging.CRITICAL: "\033[1;91m"  # Bright Red
+        logging.DEBUG: "<cyan>",
+        logging.INFO: "<green>",
+        logging.WARNING: "<yellow>",
+        logging.ERROR: "<red>",
+        logging.CRITICAL: "<light-red>",
     }
-    color_reset = "\033[0m"
 
     def format(self, record):
-        try:
-            record.message = record.getMessage()
-        except Exception as e:
-            record.message = f"Bad message ({e}): {record.__dict__}"
-        record.asctime = time.strftime(
-            "%m-%d %H:%M:%S", self.converter(record.created))
-        prefix = f"{record.asctime} | {record.name} [{record.levelname}] :"
-        color = self.colors.get(record.levelno, "")
-        formatted = f"{color}{prefix}{self.color_reset} {record.message}"
+        loguru_record = {
+            "name": record.name,
+            "level": record.levelname,
+            "asctime": time.strftime("%m-%d %H:%M:%S", self.converter(record.created)),
+            "message": record.getMessage(),
+            **record.__dict__,
+        }
 
-        # Additional details
+        # Additional details excluding standard LogRecord attributes
         extra_details = ' '.join(
-            f"{k}={v}" for k, v in record.__dict__.items()
+            f"<magenta>{k}</magenta>=<blue>{v}</blue>" for k, v in record.__dict__.items()
             if k not in {
                 'levelname', 'asctime', 'module', 'lineno', 'args', 'message',
                 'filename', 'exc_info', 'exc_text', 'created', 'funcName',
                 'processName', 'process', 'msecs', 'relativeCreated', 'thread',
                 'threadName', 'name', 'levelno', 'msg', 'pathname', 'stack_info',
-            })
-        if extra_details:
-            formatted += f" {extra_details}"
+            }
+        )
+        loguru_record['extra'] = extra_details
 
-        # Exception handling
-        if record.exc_info:
-            if not record.exc_text:
-                record.exc_text = self.formatException(record.exc_info)
-        if record.exc_text:
-            formatted = f"{formatted.rstrip()}\n{record.exc_text}"
-        return formatted.replace("\n", "\n    ")
+        color = self.colors.get(record.levelno, "")
+        reset_color = "</>"
+        log_message = "<level>{asctime}</level> | <level>{name}</level> | <level>{level}</level>: {message} {extra}"
 
+        return color + log_message.format(**loguru_record) + reset_color
 
-def enablelogging(level=logging.DEBUG, color=None):
+def enablelogging(level=logging.DEBUG, color=True):
     """
     Enable pretty logging with Tornado-style formatting.
 
     Args:
         level: Logging level.
-        color: Boolean to force color (default: autodetect based on terminal support).
+        color: Boolean to enable or disable color (default: True).
     """
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.DEBUG)
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(logging.DEBUG)
+    # Create Loguru logger
+    logger.remove()  # Remove any default handlers
+    logger.add(sys.stdout, level=level)  # Add a stream handler for console output
 
+    # Set up file rotation with Loguru
     log_path = pathlib.Path('./Main/logger') / 'kiyo.log'
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    file_handler = RotatingFileHandler(
-        log_path, maxBytes=1024 * 1024, backupCount=5, encoding='utf-8'
-    )
-    file_handler.setLevel(logging.DEBUG)
+    logger.add(log_path, rotation="1 week", retention="7 days", level=level)
 
-    formatter = TornadoLogFormatter()
-    console_handler.setFormatter(formatter)
-    file_handler.setFormatter(formatter)
+    # Set up Loguru handler for logging module
+    loguru_handler = logging.StreamHandler(sys.stdout)
+    loguru_handler.setLevel(level)
+    loguru_handler.setFormatter(TornadoLogFormatter())
+    logging.getLogger().addHandler(loguru_handler)
 
-    # Add handlers to the root logger
-    root_logger.addHandler(console_handler)
-    root_logger.addHandler(file_handler)
-
-    # Set levels for specific loggers
     logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
     logging.getLogger('psycopg2').setLevel(logging.WARNING)
     logging.getLogger('ptbcontrib.postgres_persistence.postgrespersistence').setLevel(logging.WARNING)
     logging.getLogger('apscheduler.scheduler').setLevel(logging.INFO)
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
-    # Apply color if requested
-    if color is None:
-        color = False
-        if sys.stderr.isatty():
-            try:
-                import curses
-                curses.setupterm()
-                if curses.tigetnum("colors") > 0:
-                    color = True
-            except Exception:
-                pass
+    if color and sys.stderr.isatty():
+        try:
+            import curses
+            curses.setupterm()
+            if curses.tigetnum("colors") > 0:
+                logger.info("Terminal supports colors")
+        except Exception:
+            pass
 
-    if color:
-        formatter.colors = {
-            logging.DEBUG: "\033[94m",    # Blue
-            logging.INFO: "\033[92m",     # Green
-            logging.WARNING: "\033[93m",  # Yellow
-            logging.ERROR: "\033[91m",    # Red
-            logging.CRITICAL: "\033[1;91m"  # Bright Red
-        }
-    LOGS.setLevel(level)
-    LOGS = logging.getLogger('Kiyo')
-    LOGS.info('Initialized Logger')
-
+    logger.info('Initialized Logger')
