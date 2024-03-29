@@ -1,8 +1,9 @@
-import logging
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import QueuePool
+from contextlib import contextmanager
+import logging
 
 LOGS = logging.getLogger(__name__)
 
@@ -14,7 +15,7 @@ class Database:
         self.Session = None
         self.engine = None
         self.connect(db_uri, db_type, debug, pool_size, max_overflow)
-        LOGS.info('Successfully Connected to SQLalchemy')
+        LOGS.info("Successfully Connected to SQLAlchemy.")
 
     def connect(self, db_uri: str, db_type: str, debug: bool,
                 pool_size: int, max_overflow: int):
@@ -33,7 +34,7 @@ class Database:
         if self.Session:
             self.Session.close_all()
 
-    def get_session(self) -> scoped_session:
+    def get_session(self):
         return self.Session()
 
     def get_base(self):
@@ -42,9 +43,38 @@ class Database:
     def get_engine(self):
         return self.engine
 
+    @contextmanager
+    def session_scope(self):
+        """Provide a transactional scope around a series of operations."""
+        session = self.get_session()
+        try:
+            yield session
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    def create_all(self):
+        """Create all tables in the database."""
+        self.Base.metadata.create_all(self.engine)
+        _LOGS.info("All tables created.")
+
+    def drop_all(self):
+        """Drop all tables in the database."""
+        self.Base.metadata.drop_all(self.engine)
+        _LOGS.info("All tables dropped.")
+
+    def execute(self, statement):
+        """Execute a raw SQL statement."""
+        with self.engine.connect() as connection:
+            result = connection.execute(statement)
+            _LOGS.info("SQL Statement executed.")
+            return result
+
     def __enter__(self):
         return self.get_session()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
-
