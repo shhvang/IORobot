@@ -102,6 +102,5 @@ def enable_pretty_logging(level=logging.DEBUG, color=None):
             logging.CRITICAL: "\033[1;91m"  # Bright Red
         }
     LOGS.setLevel(level)
-
-    return LOGS
+    LOGS.info('Initialized Logger')
 
