@@ -44,7 +44,6 @@ class TornadoLogFormatter(logging.Formatter):
             formatted = f"{formatted.rstrip()}\n{record.exc_text}"
         return formatted.replace("\n", "\n    ")
 
-LOGS = logging.getLogger('Kiyo')
 
 def enable_pretty_logging(level=logging.DEBUG, color=None):
     """
@@ -102,5 +101,6 @@ def enable_pretty_logging(level=logging.DEBUG, color=None):
             logging.CRITICAL: "\033[1;91m"  # Bright Red
         }
     LOGS.setLevel(level)
+    LOGS = logging.getLogger('Kiyo')
     LOGS.info('Initialized Logger')
 
