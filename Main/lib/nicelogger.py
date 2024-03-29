@@ -45,7 +45,7 @@ class TornadoLogFormatter(logging.Formatter):
         return formatted.replace("\n", "\n    ")
 
 
-def enable_pretty_logging(level=logging.DEBUG, color=None):
+def enablelogging(level=logging.DEBUG, color=None):
     """
     Enable pretty logging with Tornado-style formatting.
 
