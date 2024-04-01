@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from typing import List, Optional, Union, Any, Dict
 
-from kiyo.logger import logger
+from IO.logger import logger
 
 class Loader:
     def __init__(self, path: str):

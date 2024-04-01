@@ -1,6 +1,6 @@
 import threading
 from sqlalchemy import Column, String, UnicodeText
-from sql import Session, Base
+from Database import Session, Base
 
 
 class ChatLangs(Base):

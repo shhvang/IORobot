@@ -3,9 +3,9 @@ from datetime import datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, CommandHandler
 from telegram.constants import ParseMode
-from kiyo_plugins.utils.start_helpers import gen_start_kb
+from Plugins.utils.start_helpers import gen_start_kb
 
-from kiyo import kiyo
+from IO import kiyo
 
 def get_readable_time(seconds: int) -> str:
     intervals = [(' days, ', 86400), ('h:', 3600), ('m:', 60), ('s', 1)]
@@ -44,7 +44,7 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     end = datetime.now()
     m_s = (end - start).microseconds / 1000
     await ass.edit_text(f"Pong!\n`{m_s}ms`", parse_mode=ParseMode.MARKDOWN)
-
+    
 
 kiyo.client.add_handler(CommandHandler('start', start))
 kiyo.client.add_handler(CommandHandler('ping', ping))

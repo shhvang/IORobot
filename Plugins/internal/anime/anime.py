@@ -1,5 +1,5 @@
 import requests
-from kiyo import kiyo
+from IO import kiyo
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.constants import ParseMode
@@ -107,11 +107,9 @@ async def anime(update: Update, context):
             msg += f"🎥 Type: {anime_data['format']} | Status: {anime_data.get('status', 'N/A').replace('_', ' ')}\n"
             msg += f"🌟 Score: {anime_data['averageScore']} | By- {anime_data['id']}\n"
             msg += f"🔢 Episodes: {anime_data.get('episodes', 'N/A')} | {anime_data.get('duration', 'N/A')} Per Epis\n"
-import requests
-from kiyo import kiyo
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import CommandHandler, CallbackQueryHandler
-from telegram.constants import ParseMode
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        
 
 def shorten(description, info="anilist.co"):
     msg = ""

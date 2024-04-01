@@ -38,9 +38,9 @@ def decrypt(value: str) -> str:
 
 config = Configuration()
 
-TOKEN: str = config.get_config('Token', cast_func=str)
-BASE_URL: str = config.get_config('BaseUrl', fallback='https://api.telegram.org/bot', cast_func=str)
-BASE_FILE_URL: str = config.get_config('BaseFileUrl', fallback='https://api.telegram.org/file/bot', cast_func=str)
+TOKEN: str = config.get_config('TOKEN', cast_func=str)
+BASE_URL: str = config.get_config('BASE_URI', fallback='https://api.telegram.org/bot', cast_func=str)
+BASE_FILE_URL: str = config.get_config('BASEFILE_URI', fallback='https://api.telegram.org/file/bot', cast_func=str)
 
 DEV_USERS: List[int] = config.get_config('DEV_ID', fallback=[1, 2, 3], cast_func=lambda x: list(map(int, x.split(','))))
 SUDO_USERS: List[int] = config.get_config('SUDO_ID', fallback=[1, 2, 3], cast_func=lambda x: list(map(int, x.split(','))))
@@ -61,5 +61,5 @@ DATABASE_URI: str = config.get_config(
 ENCRYPTED_TOKEN = encrypt(TOKEN)
 ENCRYPTED_DATABASE_URI = encrypt(DATABASE_URI)
 
-config._instance._config.set("kiyo", "Token", ENCRYPTED_TOKEN)
+config._instance._config.set("kiyo", "TOKEN", ENCRYPTED_TOKEN)
 config._instance._config.set("kiyo", "DATABASE_URI", ENCRYPTED_DATABASE_URI)

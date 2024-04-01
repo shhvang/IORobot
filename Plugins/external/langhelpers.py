@@ -5,7 +5,7 @@ import logging
 
 from pathlib import Path
 from typing import Dict, Union
-import sql.language_sql as sql
+import Database.language_sql as sql
 
 logs = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ languages = {}
 
 @functools.lru_cache(maxsize=None)
 def reload_strings(lang_code: str = "en") -> Dict[str, str]:
-    lang_file = Path("./kiyo/locales") / f"{lang_code}.yaml"
+    lang_file = Path("./IO/locales") / f"{lang_code}.yaml"
     if lang_file.exists():
         with lang_file.open("r", encoding="utf-8") as file:
             lang_data = yaml.safe_load(file)
@@ -44,7 +44,7 @@ def get_language(language: str) -> str:
     else:
         return ""
 
-def tlang(
+def _(
     chat_id: Union[int, str], 
     string: str
 ) -> str:

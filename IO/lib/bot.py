@@ -7,11 +7,11 @@ import traceback
 from typing import Optional
 
 from telegram.ext import ApplicationBuilder
-from kiyo.lib import Attributes
-from kiyo import configs as config
-from kiyo.logger import enablelogging, logger
-from kiyo.loader import Loader
-from kiyo_plugins.external.langhelpers import reload_strings
+from IO.lib import Attributes
+from IO import configs as config
+from IO.logger import enablelogging, logger
+from IO.loader import Loader
+from Plugins.external.langhelpers import reload_strings
 
 class rKiyobot:
     def __init__(self, cfg=config, logger=logger, *args, **kwargs):
@@ -39,7 +39,7 @@ class rKiyobot:
 
     def load_modules(self):
         try:
-            module_loader = Loader('./kiyo_plugins/internal/')  # Create a Loader instance
+            module_loader = Loader('./Plugins/internal/')  # Create a Loader instance
             loaded_modules = module_loader.import_module(log=True)  # Import all modules
         except Exception as e:
             self.log(f"Error loading modules: {e}", level=logging.ERROR)
