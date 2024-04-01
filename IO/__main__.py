@@ -1,4 +1,4 @@
-from IO import kiyo, LOGGER
+from IO import kiyo, logger
 from telegram import ParseMode
 from telegram.error import BadRequest, Unauthorized
 
@@ -14,11 +14,11 @@ def send_boot_message():
                     parse_mode=ParseMode.MARKDOWN,
                 )
             except Unauthorized:
-                LOGGER.warning(
+                logger.warning(
                     f"Bot is unable to send message to @{SUPPORT_CHAT}, go and check!"
                 )
             except BadRequest as e:
-                LOGGER.warning(e.message)
+                logger.warning(e.message)
 
 if __name__ == "__main__":
     kiyo.run()
