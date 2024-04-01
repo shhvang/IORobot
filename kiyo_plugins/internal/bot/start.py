@@ -24,7 +24,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if chat.type != 'private':
         return await message.reply_text(
             "Hi, I'm {}\nuptime: `{}`".format(
-                context.bot.first_name, get_readable_time(int(time.time() - yuii.startTime))
+                context.bot.first_name, get_readable_time(int(time.time() - kiyo.startTime))
             ),
             parse_mode=ParseMode.MARKDOWN,
             )
