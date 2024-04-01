@@ -29,7 +29,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     start = datetime.now()
-    ass = await message.reply_text("`Pong!`")
+    ass = await message.reply_text("Pong!")
     end = datetime.now()
     m_s = (end - start).microseconds / 1000
     await ass.edit_text(f"Pong!\n`{m_s}ms`", parse_mode=ParseMode.MARKDOWN)
