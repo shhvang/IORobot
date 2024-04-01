@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from yuii_plugins.external.langhelpers import tlang
+from kiyo_plugins.external.langhelpers import tlang
 
 def gen_start_kb(chat=None):
     if chat:
