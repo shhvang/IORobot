@@ -12,6 +12,5 @@ markdown2
 emoji
 beautifulsoup4
 datetime
-html
 jikanpy
 requests
