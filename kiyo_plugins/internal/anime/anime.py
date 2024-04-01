@@ -1,10 +1,3 @@
-import datetime
-import html
-import textwrap
-import json
-import time
-import bs4
-import jikanpy
 import requests
 from kiyo import kiyo
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
