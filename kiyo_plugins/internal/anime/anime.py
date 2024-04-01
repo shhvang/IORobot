@@ -139,3 +139,6 @@ async def anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print(e)
         await message.reply_text("An error occurred while processing the request.")
 
+kiyo.client.add_handler(
+    CommandHandler('anime', anime)
+)
