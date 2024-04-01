@@ -1,0 +1,14 @@
+authors: 'aruotoxd - shivang'
+
+language: "English 🇺🇲"
+
+curr_chat_lang: "Hey. Your current language is {}, select the one you want from the buttons below :)"
+set_chat_lang: "Great, {} it is from now on!"
+
+start_string: "I'm {}\nuptime: `{}`"
+
+support_btn: 'Support'
+update_btn: 'Updates'
+source_btn: 'Source Code'
+inline_btn: 'Try Inline'
+add_btn: 'Add Me'
