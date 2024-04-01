@@ -1,6 +1,6 @@
 from IO import kiyo, logger
 from telegram.constants import ParseMode
-from telegram.error import BadRequest, Unauthorized
+from telegram.error import BadRequest, Forbidden
 
 SUPPORT_CHAT = -1002146661683
 
@@ -13,7 +13,7 @@ def send_boot_message():
                     caption=f"⚡ Successfully Rebooted",
                     parse_mode=ParseMode.MARKDOWN,
                 )
-            except Unauthorized:
+            except Forbidden:
                 logger.warning(
                     f"Bot is unable to send message to @{SUPPORT_CHAT}, go and check!"
                 )
