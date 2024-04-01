@@ -24,5 +24,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ),
         parse_mode=ParseMode.MARKDOWN,
         )
+
+async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.effective_message
+    start = time.monotonic()
+    await message.reply_text('Pong!')
+    end = time.monotonic()
+    duration = (end - start) * 1000
+    await message.edit_text(
+        f'Pong!\n`{duration}`ms', 
+        parse_mode=ParseMode.MARKDOWN,
+    )
     
 kiyo.client.add_handler(CommandHandler('start', start))
