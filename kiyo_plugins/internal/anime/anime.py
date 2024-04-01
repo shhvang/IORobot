@@ -87,22 +87,125 @@ async def anime(update: Update, context):
                     timeUntilAiring
                 }
             }
-            sequel {
+            streamingEpisodes {
+                title
+                url
+                site
+            }
+            trailer {
+                id
+                site
+            }
+            officialSiteUrl
+        }
+    }
+    '''
+    try:
+        response = requests.post(
+            url, json={"query": anime_query, "variables": variables}
+        )
+        json_data = response.json()
+        if "errors" in json_data.keys():
+            await message.reply_text("Anime not found")
+            return
+        if json_data:
+            anime_data = json_data["data"]["Media"]
+            msg = f"<b>{anime_data['title']['romaji']}</b> (`{anime_data['title']['native']}`)\n\n"
+            msg += f"🎥 Type: {anime_data['format']} | Status: {anime_data.get('status', 'N/A').replace('_', ' ')}\n"
+            msg += f"🌟 Score: {anime_data['averageScore']} | By- {anime_data['id']}\n"
+            msg += f"🔢 Episodes: {anime_data.get('episodes', 'N/A')} | {anime_data.get('duration', 'N/A')} Per Epis\n"
+import requests
+from kiyo import kiyo
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import CommandHandler, CallbackQueryHandler
+from telegram.constants import ParseMode
+
+def shorten(description, info="anilist.co"):
+    msg = ""
+    if len(description) > 700:
+        description = description[0:550] + "...."
+        msg += f"\n*Description*: _{description}_[Read More]({info})"
+    else:
+        msg += f"\n*Description*: _{description}_"
+    return msg
+
+async def anime(update: Update, context):
+    message = update.effective_message
+    search = message.text.split(" ", 1)
+    if len(search) == 1:
+        await message.reply_text("Format : /anime < anime name >")
+        return
+    else:
+        search = search[1]
+    variables = {"search": search}
+    url = "https://graphql.anilist.co"
+    anime_query = '''
+    query ($search: String) {
+        Media(search: $search, type: ANIME) {
+            id
+            title {
+                romaji
+                native
+            }
+            format
+            status
+            episodes
+            duration
+            averageScore
+            genres
+            studios {
                 nodes {
-                    title {
-                        romaji
-                    }
-                    siteUrl
+                    name
                 }
             }
-            prequel {
-                nodes {
-                    title {
-                        romaji
+            siteUrl
+            trailer {
+                id
+                site
+            }
+            description
+            bannerImage
+            relations {
+                edges {
+                    relationType
+                    node {
+                        title {
+                            romaji
+                        }
+                        coverImage {
+                            large
+                        }
+                        siteUrl
                     }
-                    siteUrl
                 }
             }
+            openingThemes
+            endingThemes
+            nextAiringEpisode {
+                airingAt
+            }
+            prevAiringEpisode {
+                airingAt
+            }
+            nextAiringEpisode {
+                timeUntilAiring
+            }
+            airingSchedule {
+                nodes {
+                    episode
+                    timeUntilAiring
+                }
+            }
+            streamingEpisodes {
+                title
+                url
+                site
+            }
+            trailer {
+                id
+                site
+            }
+            officialSiteUrl
         }
     }
     '''
@@ -142,6 +245,7 @@ async def anime(update: Update, context):
                 keyboard = InlineKeyboardMarkup()
                 keyboard.add(InlineKeyboardButton("More Info", url=site_url),
                              InlineKeyboardButton("Trailer 🎬", url=trailer_url))
+
             else:
                 keyboard = InlineKeyboardMarkup()
                 keyboard.add(InlineKeyboardButton("More Info", url=site_url))
@@ -153,21 +257,33 @@ async def anime(update: Update, context):
             ed_themes = anime_data.get("endingThemes", [])
             if op_themes:
                 op_buttons = [InlineKeyboardButton(f"OP {i+1}", callback_data=f"op_{i}") for i in range(len(op_themes))]
-                keyboard.add(*op_buttons)
+                keyboard.row(*op_buttons)
             if ed_themes:
                 ed_buttons = [InlineKeyboardButton(f"ED {i+1}", callback_data=f"ed_{i}") for i in range(len(ed_themes))]
-                keyboard.add(*ed_buttons)
+                keyboard.row(*ed_buttons)
 
             # Adding Callback Buttons for Sequel and Prequel
             sequel = anime_data.get("sequel", {}).get("nodes", [])
             if sequel:
                 sequel_buttons = [InlineKeyboardButton(f"Sequel: {node['title']['romaji']}", url=node['siteUrl']) for node in sequel]
-                keyboard.add(*sequel_buttons)
+                keyboard.row(*sequel_buttons)
 
             prequel = anime_data.get("prequel", {}).get("nodes", [])
             if prequel:
                 prequel_buttons = [InlineKeyboardButton(f"Prequel: {node['title']['romaji']}", url=node['siteUrl']) for node in prequel]
-                keyboard.add(*prequel_buttons)
+                keyboard.row(*prequel_buttons)
+
+            # Adding Streaming Platforms Buttons
+            streaming_sites = anime_data.get("streamingEpisodes", [])
+            for site in streaming_sites:
+                streaming_button = InlineKeyboardButton(f"{site['site']}", url=site['url'])
+                keyboard.row(streaming_button)
+
+            # Adding Official Site Button
+            official_site = anime_data.get("officialSiteUrl")
+            if official_site:
+                official_site_button = InlineKeyboardButton("Official Site", url=official_site)
+                keyboard.row(official_site_button)
 
             try:
                 await message.reply_photo(
