@@ -7,9 +7,8 @@ import bs4
 import jikanpy
 import requests
 from kiyo import kiyo
-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.constants import ParseMode
 
 def shorten(description, info="anilist.co"):
@@ -21,27 +20,10 @@ def shorten(description, info="anilist.co"):
         msg += f"\n*Description*: _{description}_"
     return msg
 
-
-def t(milliseconds: int) -> str:
-    """Inputs time in milliseconds, to get beautified time,
-    as string"""
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-    tmp = (
-        ((str(days) + " Days, ") if days else "")
-        + ((str(hours) + " Hours, ") if hours else "")
-        + ((str(minutes) + " Minutes, ") if minutes else "")
-        + ((str(seconds) + " Seconds, ") if seconds else "")
-        + ((str(milliseconds) + " ms, ") if milliseconds else "")
-    )
-    return tmp[:-2]
-
-async def anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def anime(update: Update, context):
     message = update.effective_message
-    chat = update.effective_chat
     search = message.text.split(" ", 1)
+    if len(search) == 1:
         await message.reply_text("Format : /anime < anime name >")
         return
     else:
@@ -74,6 +56,53 @@ async def anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
             }
             description
             bannerImage
+            relations {
+                edges {
+                    relationType
+                    node {
+                        title {
+                            romaji
+                        }
+                        coverImage {
+                            large
+                        }
+                        siteUrl
+                    }
+                }
+            }
+            openingThemes
+            endingThemes
+            nextAiringEpisode {
+                airingAt
+            }
+            prevAiringEpisode {
+                airingAt
+            }
+            nextAiringEpisode {
+                timeUntilAiring
+            }
+            airingSchedule {
+                nodes {
+                    episode
+                    timeUntilAiring
+                }
+            }
+            sequel {
+                nodes {
+                    title {
+                        romaji
+                    }
+                    siteUrl
+                }
+            }
+            prequel {
+                nodes {
+                    title {
+                        romaji
+                    }
+                    siteUrl
+                }
+            }
         }
     }
     '''
@@ -118,6 +147,27 @@ async def anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 keyboard.add(InlineKeyboardButton("More Info", url=site_url))
 
             banner_image = anime_data.get("bannerImage") or "https://telegra.ph/file/cc83a0b7102ad1d7b1cb3.jpg"
+
+            # Adding Callback Buttons for Opening and Ending Themes
+            op_themes = anime_data.get("openingThemes", [])
+            ed_themes = anime_data.get("endingThemes", [])
+            if op_themes:
+                op_buttons = [InlineKeyboardButton(f"OP {i+1}", callback_data=f"op_{i}") for i in range(len(op_themes))]
+                keyboard.add(*op_buttons)
+            if ed_themes:
+                ed_buttons = [InlineKeyboardButton(f"ED {i+1}", callback_data=f"ed_{i}") for i in range(len(ed_themes))]
+                keyboard.add(*ed_buttons)
+
+            # Adding Callback Buttons for Sequel and Prequel
+            sequel = anime_data.get("sequel", {}).get("nodes", [])
+            if sequel:
+                sequel_buttons = [InlineKeyboardButton(f"Sequel: {node['title']['romaji']}", url=node['siteUrl']) for node in sequel]
+                keyboard.add(*sequel_buttons)
+
+            prequel = anime_data.get("prequel", {}).get("nodes", [])
+            if prequel:
+                prequel_buttons = [InlineKeyboardButton(f"Prequel: {node['title']['romaji']}", url=node['siteUrl']) for node in prequel]
+                keyboard.add(*prequel_buttons)
 
             try:
                 await message.reply_photo(
