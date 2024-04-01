@@ -1,5 +1,5 @@
 from IO import kiyo, logger
-from telegram import ParseMode
+from telegram.constants import ParseMode
 from telegram.error import BadRequest, Unauthorized
 
 SUPPORT_CHAT = -1002146661683
