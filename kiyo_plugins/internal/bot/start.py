@@ -1,4 +1,4 @@
-import time
+import time, datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, CommandHandler
 from telegram.constants import ParseMode
@@ -27,14 +27,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
-    start = time.monotonic()
-    ass = await message.reply_text('Pong!')
-    end = time.monotonic()
-    duration = (end - start) * 1000
-    await ass.edit_text(
-        f'Pong!\n`{duration}`ms', 
-        parse_mode=ParseMode.MARKDOWN,
-    )
-    
+    start = datetime.now()
+    ass = await message.reply_text("`Pong!`")
+    end = datetime.now()
+    m_s = (end - start).microseconds / 1000
+    await ass.edit_text(f"Pong!\n`{m_s}ms`", parse_mode=ParseMode.MARKDOWN)
+
+
 kiyo.client.add_handler(CommandHandler('start', start))
 kiyo.client.add_handler(CommandHandler('ping', ping))
