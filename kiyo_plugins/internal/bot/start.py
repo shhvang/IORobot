@@ -30,7 +30,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
     else:
         await message.reply_text(
-            "Hi, {} I'm {}".format(
+            "Hi, {} I'm {}\nI make telegram group management simpler for you!".format(
                 update.effective_user.first_name, context.bot.first_name
             ),
             reply_markup=InlineKeyboardMarkup(gen_start_kb(chat)),
