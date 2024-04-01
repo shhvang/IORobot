@@ -37,3 +37,4 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
 kiyo.client.add_handler(CommandHandler('start', start))
+kiyo.client.add_handler(CommandHandler('ping', ping))
