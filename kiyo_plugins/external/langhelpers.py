@@ -5,6 +5,7 @@ import logging
 
 from pathlib import Path
 from typing import Dict
+import sql.language_sql as sql
 
 logs = logging.getLogger(__name__)
 
@@ -42,3 +43,10 @@ def get_language(language: str) -> str:
         return lang_data.get("language", "")
     else:
         return ""
+
+def tlang(
+    chat_id: Union[int, str], 
+    string: str
+) -> str:
+    lang = sql.get_chat_lang(chat_id)
+    return get_string(lang, string)
