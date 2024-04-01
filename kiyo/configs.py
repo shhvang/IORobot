@@ -42,9 +42,13 @@ TOKEN: str = config.get_config('Token', cast_func=str)
 BASE_URL: str = config.get_config('BaseUrl', fallback='https://api.telegram.org/bot', cast_func=str)
 BASE_FILE_URL: str = config.get_config('BaseFileUrl', fallback='https://api.telegram.org/file/bot', cast_func=str)
 
-DEV_ID: List[int] = config.get_config('DEV_ID', fallback=[1, 2, 3], cast_func=lambda x: list(map(int, x.split(','))))
-SUDO_ID: List[int] = config.get_config('SUDO_ID', fallback=[1, 2, 3], cast_func=lambda x: list(map(int, x.split(','))))
+DEV_USERS: List[int] = config.get_config('DEV_ID', fallback=[1, 2, 3], cast_func=lambda x: list(map(int, x.split(','))))
+SUDO_USERS: List[int] = config.get_config('SUDO_ID', fallback=[1, 2, 3], cast_func=lambda x: list(map(int, x.split(','))))
 OWNER_ID: List[int] = config.get_config('OWNER_ID', fallback=[1], cast_func=lambda x: list(map(int, x.split(','))))
+WHITELIST_USERS: List[int] = config.get_config('WHITELIST_USERS', fallback=[1], cast_func=lambda x: list(map(int, x.split(','))))
+SUPPORT_USERS: List[int] = config.get_config('SUPPORT_USERS', fallback=[1], cast_func=lambda x: list(map(int, x.split(','))))
+
+
 
 # Using a default URI for database if config not found
 DATABASE_URI: str = config.get_config(
