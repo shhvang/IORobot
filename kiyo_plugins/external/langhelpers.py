@@ -4,7 +4,7 @@ import functools
 import logging
 
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Union
 import sql.language_sql as sql
 
 logs = logging.getLogger(__name__)
