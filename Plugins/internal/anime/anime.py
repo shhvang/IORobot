@@ -86,6 +86,16 @@ anime_query = '''
     }
 '''
 
+def get_anime_results(search_query):
+    variables = {
+        "search": search_query
+    }
+    response = requests.post(url, json={"query": anime_query, "variables": variables})
+    if response.status_code == 200:
+        return response.json()["data"]["Media"]
+    else:
+        return None
+        
 async def anime(update: Update, context):
     message = update.effective_message
     search = message.text.split(" ", 1)
@@ -93,111 +103,23 @@ async def anime(update: Update, context):
         await message.reply_text("Format : /anime < anime name >")
         return
     else:
-        search = search[1]
-    variables = {"search": search}
-    try:
-        response = requests.post(
-            url, json={"query": anime_query, "variables": variables}
-        )
-        json_data = response.json()
-        print(json_data)
-        if "errors" in json_data.keys():
-            await message.reply_text(f"Anime not found or an error occurred", parse_mode==ParseMode.MARKDOWN)
-            return
-        if json_data:
-            anime_data = json_data["data"]["Media"]
-            msg = f"<b>{anime_data['title']['romaji']}</b> (`{anime_data['title']['native']}`)\n\n"
-            msg += f"🎥 Type: {anime_data['format']} | Status: {anime_data.get('status', 'N/A').replace('_', ' ')}\n"
-            msg += f"🌟 Score: {anime_data['averageScore']} | By- {anime_data['id']}\n"
-            msg += f"🔢 Episodes: {anime_data.get('episodes', 'N/A')} | {anime_data.get('duration', 'N/A')} Per Epis\n"
-            msg += f"🗓 Aired: {anime_data.get('startDate', 'N/A')} - {anime_data.get('endDate', 'N/A')}\n\n"
-            msg += f"🗿 Genres: "
-            for genre in anime_data["genres"]:
-                msg += f"{genre}, "
-            msg = msg[:-2] + "\n"
-            msg += f"🏢 Studios: "
-            if not anime_data["studios"]["nodes"]:
-                msg += "N/A"
-            else:
-                for studio in anime_data["studios"]["nodes"]:
-                    msg += f"{studio['name']}, "
-                msg = msg[:-2] + "\n"
+        search_query = search[1]
+        results = get_anime_results(search_query)
+        if results:
+            keyboard = []
+            for anime in results:
+                title = anime["title"]["romaji"]
+                url = anime["siteUrl"]
+                button = InlineKeyboardButton(title, callback_data=url)
+                keyboard.append([button])
 
-            description = anime_data.get("description", "N/A").replace("<i>", "").replace("</i>", "").replace("<br>", "")
-            msg += f"\n{description[:550]}..."
-            site_url = anime_data.get("siteUrl")
-            trailer = anime_data.get("trailer", None)
-            if trailer and trailer["site"] == "youtube":
-                trailer_url = f"https://youtu.be/{trailer['id']}"
-                keyboard = InlineKeyboardMarkup()
-                keyboard.add(InlineKeyboardButton("More Info", url=site_url),
-                             InlineKeyboardButton("Trailer 🎬", url=trailer_url))
-
-            else:
-                keyboard = InlineKeyboardMarkup()
-                keyboard.add(InlineKeyboardButton("More Info", url=site_url))
-
-            banner_image = f"https://img.anili.st/media/{anime_data['id']}" or "https://telegra.ph/file/cc83a0b7102ad1d7b1cb3.jpg"
-
-            # Adding Callback Buttons for Opening and Ending Themes
-            op_themes = anime_data.get("openingThemes", [])
-            ed_themes = anime_data.get("endingThemes", [])
-            if op_themes:
-                op_buttons = [InlineKeyboardButton(f"OP {i+1}", callback_data=f"op_{i}") for i in range(len(op_themes))]
-                keyboard.row(*op_buttons)
-            if ed_themes:
-                ed_buttons = [InlineKeyboardButton(f"ED {i+1}", callback_data=f"ed_{i}") for i in range(len(ed_themes))]
-                keyboard.row(*ed_buttons)
-
-            # Adding Streaming Platforms Buttons
-            streaming_sites = anime_data.get("streamingEpisodes", [])
-            for site in streaming_sites:
-                streaming_button = InlineKeyboardButton(f"{site['site']}", url=site['url'])
-                keyboard.row(streaming_button)
-
-            # Adding Official Site Button
-            official_site = anime_data.get("officialSiteUrl")
-            if official_site:
-                official_site_button = InlineKeyboardButton("Official Site", url=official_site)
-                keyboard.row(official_site_button)
-
-            try:
-                await message.reply_photo(
-                    photo=banner_image,
-                    caption=msg,
-                    parse_mode=ParseMode.HTML,
-                    reply_markup=keyboard
-                )
-            except:
-                msg += f"\n[〽️]({banner_image})"
-                await message.reply_text(
-                    msg,
-                    parse_mode=ParseMode.HTML,
-                    reply_markup=keyboard
-                )
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await message.reply_text("Here are the search results:", reply_markup=reply_markup)
         else:
-            await message.reply_text("Anime not found")
-    except Exception as e:
-        print(e)
-        await message.reply_text("An error occurred while processing the request.")
-
-async def loggs(update: Update, context):
-    message = update.effective_message
-    log_file = pathlib.Path('./IO/logs/IO.txt')
-
-    try:
-        if log_file.exists():
-            await message.reply_document(document=InputFile(str(log_file)), caption="Here is the log file.")
-        else:
-            await update.message.reply_text("Log file not found.")
-    except Exception as e:
-        #logger.error("Error sending log file: %s", e)
-        await message.reply_text(f"An error occurred while sending the log file: {e}")
-
+            await message.reply_text("No anime found for that query.")
+            
 
 kiyo.client.add_handler(
     CommandHandler('anime', anime)
 )
-kiyo.client.add_handler(
-    CommandHandler('logs', loggs)
-)
+
