@@ -1,4 +1,4 @@
-import requests
+import requests, pathlib
 from IO import kiyo
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CommandHandler, CallbackQueryHandler
@@ -100,6 +100,7 @@ async def anime(update: Update, context):
             url, json={"query": anime_query, "variables": variables}
         )
         json_data = response.json()
+        print(json_data)
         if "errors" in json_data.keys():
             await message.reply_text(f"Anime not found or an error occurred", parse_mode==ParseMode.MARKDOWN)
             return
@@ -191,6 +192,23 @@ async def anime(update: Update, context):
         print(e)
         await message.reply_text("An error occurred while processing the request.")
 
+async def loggs(update: Update, context):
+    message = update.effective_message
+    log_file = pathlib.Path('./IO/logger/IO.txt')
+
+    try:
+        if log_file.exists():
+            await message.reply_document(document=InputFile(str(log_file)), caption="Here is the log file.")
+        else:
+            await update.message.reply_text("Log file not found.")
+    except Exception as e:
+        #logger.error("Error sending log file: %s", e)
+        await message.reply_text("An error occurred while sending the log file.")
+
+
 kiyo.client.add_handler(
     CommandHandler('anime', anime)
+)
+kiyo.client.add_handler(
+    CommandHandler('logs', loggs)
 )
