@@ -78,11 +78,12 @@ async def anime(update: Update, context: CallbackContext):
     results = json_data["data"]["Media"]
     
     buttons = []
+    await message.reply_text(f'{result["title"]["romaji"]}')
     for result in results:
         if "title" in result and isinstance(result["title"], dict):
             title = result["title"]["romaji"] if "romaji" in result["title"] else result["title"]["native"]
         else:
-            title = result["title"]
+            title = result["title"]["romaji"]
         url = result["siteUrl"]
         button = InlineKeyboardButton(title, url=url)
         buttons.append([button])
