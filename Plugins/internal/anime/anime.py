@@ -149,17 +149,6 @@ async def anime(update: Update, context):
                 ed_buttons = [InlineKeyboardButton(f"ED {i+1}", callback_data=f"ed_{i}") for i in range(len(ed_themes))]
                 keyboard.row(*ed_buttons)
 
-            # Adding Callback Buttons for Sequel and Prequel
-            sequel = anime_data.get("sequel", {}).get("nodes", [])
-            if sequel:
-                sequel_buttons = [InlineKeyboardButton(f"Sequel: {node['title']['romaji']}", url=node['siteUrl']) for node in sequel]
-                keyboard.row(*sequel_buttons)
-
-            prequel = anime_data.get("prequel", {}).get("nodes", [])
-            if prequel:
-                prequel_buttons = [InlineKeyboardButton(f"Prequel: {node['title']['romaji']}", url=node['siteUrl']) for node in prequel]
-                keyboard.row(*prequel_buttons)
-
             # Adding Streaming Platforms Buttons
             streaming_sites = anime_data.get("streamingEpisodes", [])
             for site in streaming_sites:
