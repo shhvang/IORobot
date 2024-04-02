@@ -100,7 +100,7 @@ async def anime(update: Update, context):
         )
         json_data = response.json()
         if "errors" in json_data.keys():
-            await message.reply_text("Anime not found or an error occurred.")
+            await message.reply_text(f"Anime not found or an error occurred: `{(json_data["errors"])}`", parse_mode==ParseMode.MARKDOWN)
             return
         if json_data:
             anime_data = json_data["data"]["Media"]
