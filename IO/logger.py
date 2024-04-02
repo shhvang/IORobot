@@ -81,7 +81,7 @@ def enablelogging(level=logging.DEBUG, color=None):
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.DEBUG)
 
-    log_path = pathlib.Path('./IO/logger') / 'IO.txt'
+    log_path = pathlib.Path('./IO/logs') / 'IO.txt'
     log_path.parent.mkdir(parents=True, exist_ok=True)
     file_handler = RotatingFileHandler(
         log_path, maxBytes=1024 * 1024, backupCount=5, encoding='utf-8'
