@@ -15,16 +15,7 @@ def shorten(description, info="anilist.co"):
         msg += f"\n*Description*: _{description}_"
     return msg
 
-async def anime(update: Update, context):
-    message = update.effective_message
-    search = message.text.split(" ", 1)
-    if len(search) == 1:
-        await message.reply_text("Format : /anime < anime name >")
-        return
-    else:
-        search = search[1]
-    variables = {"search": search}
-    anime_query = '''
+anime_query = '''
     query ($search: String) {
         Media(search: $search, type: ANIME) {
             id
@@ -93,14 +84,24 @@ async def anime(update: Update, context):
             officialSiteUrl
         }
     }
-    '''
+'''
+
+async def anime(update: Update, context):
+    message = update.effective_message
+    search = message.text.split(" ", 1)
+    if len(search) == 1:
+        await message.reply_text("Format : /anime < anime name >")
+        return
+    else:
+        search = search[1]
+    variables = {"search": search}
     try:
         response = requests.post(
             url, json={"query": anime_query, "variables": variables}
         )
         json_data = response.json()
         if "errors" in json_data.keys():
-            await message.reply_text(f"Anime not found or an error occurred: `{(json_data["errors"])}`", parse_mode==ParseMode.MARKDOWN)
+            await message.reply_text(f"Anime not found or an error occurred", parse_mode==ParseMode.MARKDOWN)
             return
         if json_data:
             anime_data = json_data["data"]["Media"]
@@ -122,7 +123,7 @@ async def anime(update: Update, context):
                 msg = msg[:-2] + "\n"
 
             description = anime_data.get("description", "N/A").replace("<i>", "").replace("</i>", "").replace("<br>", "")
-            msg += f"\n{description[:500]}..."
+            msg += f"\n{description[:550]}..."
             site_url = anime_data.get("siteUrl")
             trailer = anime_data.get("trailer", None)
             if trailer and trailer["site"] == "youtube":
@@ -135,7 +136,7 @@ async def anime(update: Update, context):
                 keyboard = InlineKeyboardMarkup()
                 keyboard.add(InlineKeyboardButton("More Info", url=site_url))
 
-            banner_image = anime_data.get("bannerImage") or "https://telegra.ph/file/cc83a0b7102ad1d7b1cb3.jpg"
+            banner_image = f"https://img.anili.st/media/{anime_data['id']}" or "https://telegra.ph/file/cc83a0b7102ad1d7b1cb3.jpg"
 
             # Adding Callback Buttons for Opening and Ending Themes
             op_themes = anime_data.get("openingThemes", [])
