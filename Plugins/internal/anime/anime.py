@@ -13,17 +13,7 @@ def shorten(description, info="anilist.co"):
         msg += f"\n*Description*: _{description}_"
     return msg
 
-async def anime(update: Update, context):
-    message = update.effective_message
-    search = message.text.split(" ", 1)
-    if len(search) == 1:
-        await message.reply_text("Format : /anime < anime name >")
-        return
-    else:
-        search = search[1]
-    variables = {"search": search}
-    url = "https://graphql.anilist.co"
-    anime_query = '''
+anime_query = '''
     query ($search: String) {
         Media(search: $search, type: ANIME) {
             id
@@ -93,6 +83,17 @@ async def anime(update: Update, context):
         }
     }
     '''
+
+async def anime(update: Update, context):
+    message = update.effective_message
+    search = message.text.split(" ", 1)
+    if len(search) == 1:
+        await message.reply_text("Format : /anime < anime name >")
+        return
+    else:
+        search = search[1]
+    variables = {"search": search}
+    url = "https://graphql.anilist.co"
     try:
         response = requests.post(
             url, json={"query": anime_query, "variables": variables}
