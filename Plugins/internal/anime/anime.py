@@ -1,6 +1,6 @@
 import requests, pathlib
 from IO import kiyo
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, InputFile
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.constants import ParseMode
 
