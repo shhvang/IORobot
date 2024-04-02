@@ -194,7 +194,7 @@ async def anime(update: Update, context):
 
 async def loggs(update: Update, context):
     message = update.effective_message
-    log_file = pathlib.Path('./IO/logger/IO.txt')
+    log_file = pathlib.Path('./IO/logs/IO.txt')
 
     try:
         if log_file.exists():
@@ -203,7 +203,7 @@ async def loggs(update: Update, context):
             await update.message.reply_text("Log file not found.")
     except Exception as e:
         #logger.error("Error sending log file: %s", e)
-        await message.reply_text("An error occurred while sending the log file.")
+        await message.reply_text(f"An error occurred while sending the log file: {e}")
 
 
 kiyo.client.add_handler(
