@@ -4,6 +4,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.constants import ParseMode
 
+url = "https://graphql.anilist.co"
+
 def shorten(description, info="anilist.co"):
     msg = ""
     if len(description) > 700:
@@ -22,7 +24,6 @@ async def anime(update: Update, context):
     else:
         search = search[1]
     variables = {"search": search}
-    url = "https://graphql.anilist.co"
     anime_query = '''
     query ($search: String) {
         Media(search: $search, type: ANIME) {
