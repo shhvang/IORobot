@@ -9,10 +9,10 @@ def scrape_anime_results(search_query):
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, "html.parser")
-        results = soup.find_all("div", class_="entry-container")
+        results = soup.find_all("div", class_="entry-content")
         anime_list = []
         for result in results:
-            title = result.find("h3", class_="entry-title").text.strip()
+            title = result.find("h2", class_="entry-title").text.strip()
             description = result.find("div", class_="entry-excerpt").text.strip()
             anime_url = result.find("a")["href"]
             anime_list.append({"title": title, "description": description, "url": anime_url})
