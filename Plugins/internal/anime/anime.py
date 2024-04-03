@@ -17,7 +17,7 @@ async def anime(update: Update, context):
     message = update.effective_message
     search = message.text.split(" ", 1)
     if len(search) == 1:
-        await update.effective_message.reply_text("Format: /anime <anime name>")
+        await update.effective_message.reply_text('Dont just click the cmnd its supposed to work like "/anime name of an anime"')
         return
     else:
         search = search[1]
